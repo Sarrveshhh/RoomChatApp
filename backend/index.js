@@ -22,7 +22,7 @@ io.on('connection', socket => {
   
   //listening to message
   socket.on('message', message => {
-    console.log('message:'+ message);
+    console.log('message:'+ message + ' from:'+ socket.id);
 
     //brodcaste the message
     socket.broadcast.emit('brodcast-message', message);

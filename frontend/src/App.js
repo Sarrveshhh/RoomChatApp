@@ -23,9 +23,9 @@ function App() {
     });
 
     // Clean up the socket connection when the component unmounts
-    // return () => {
-    //   socket.current.disconnect();
-    // };
+    return () => {
+      socket.current.disconnect();
+    };
   }, []); // Empty dependency array ensures this useEffect runs once
 
   return (
