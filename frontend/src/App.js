@@ -14,14 +14,18 @@ function App() {
     inputRef.current.value = '';
   };
 
-  useEffect(() => {
-    // Initialize the socket connection inside useEffect
+
+  //Code when the client enters the chat room.
+  const socketConnection = () => {
     socket.current = io('http://localhost:3001/');
-    
     socket.current.on('brodcast-message', (message) => {
       setMessages(prevMessages => [...prevMessages, message]);
     });
+  };
 
+
+  useEffect(() => {
+    socketConnection();
     // Clean up the socket connection when the component unmounts
     return () => {
       socket.current.disconnect();
