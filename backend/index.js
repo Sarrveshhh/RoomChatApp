@@ -19,13 +19,27 @@ app.use(cors());
 //socket connection
 io.on('connection', socket => {
   console.log('a user connected with id:'+ socket.id);
-  
-  //listening to message
-  socket.on('message', message => {
-    console.log('message:'+ message + ' from:'+ socket.id);
 
-    //brodcaste the message
-    socket.broadcast.emit('brodcast-message', message);
+
+  //joining a room
+  socket.on('join-room', (roomName, fname, lname, email) => {
+    console.log('user'+ socket.id +'joining room:'+ roomName);
+    socket.join(roomName);
+  });
+
+
+  //listening to message
+  // socket.on('message', message => {
+  //   console.log('message:'+ message + ' from:'+ socket.id);
+
+  //   //brodcaste the message
+  //   socket.broadcast.emit('brodcast-message', message);
+  // });
+
+
+  //listening to room message
+  socket.on('room-message', (message, roomName) => {
+    io.to(roomName).emit('message', message);
   });
 });
 
