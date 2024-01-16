@@ -1,9 +1,10 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route} from'react-router-dom';
 import Home from './Home';
-import App from './App';
 import Error from './Error';
-
+import './App1.css';
+import App from './App';
+import Termsandc from './Termsandc';
 
 const App1 = () => {
   return (
@@ -11,6 +12,7 @@ const App1 = () => {
     <Routes>
         <Route path="/room" element={<App />} />
         <Route path="/" element={<Home />} />
+        <Route path="/termsandc" element={<Termsandc />} />
         <Route path="*" element={<Error />} />
     </Routes>
     </BrowserRouter>
