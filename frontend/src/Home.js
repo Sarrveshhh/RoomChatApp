@@ -2,9 +2,9 @@ import React from 'react'
 import {useState, useEffect, useRef} from'react'
 import './App1.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
 
-const Home = () => {
+
+const Home = ({socket}) => {
 
   const [roomName, setRoomName] = useState('');
   const [fname, setFname] = useState('');
@@ -12,45 +12,20 @@ const Home = () => {
   const [email, setEmail] = useState('');
 
   const navigate = useNavigate();
-  const socket = useRef(null); // Create a ref for the socket
-
-
-  const socketConnection = () => {
-    socket.current = io('http://localhost:3001/');
-  };
-
+  
 
   const joinRoom = () => {
     if(socket.current && socket.current.connected){
       socket.current.emit('join-room', roomName, fname, lname, email);
-      navigate(`/room/${roomName}`);
+      navigate(`/room/${roomName}`, {
+        state: { socketId: socket.current.id, fname, lname, email },
+      });
 
     }
     else{
       console.log('socket is not connected');
     }
   };
-
-  const socketDisconnect = () => {
-    if(socket.current && socket.current.connected){
-      socket.current.disconnect();
-      console.log('socket Disconnected!');
-    }
-    else{
-      console.log("Socket is not connected!")
-    }
-  }
-
-
-  useEffect(() => {
-    socketConnection();
-    // Clean up the socket connection when the component unmounts
-    return () => {
-      // socket.current.disconnect();
-      socketDisconnect();
-    };
-  }, []); // Empty dependency array ensures this useEffect runs once
-
   return (
     <div className="home-div">
 

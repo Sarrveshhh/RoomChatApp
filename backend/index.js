@@ -47,7 +47,9 @@ io.on('connection', socket => {
 
   //listening to room message
   socket.on('room-message', (message, roomName) => {
-    io.to(roomName).emit('message', message);
+    io.to(roomName).emit('new-message', message);
+    // console logging for clearirity and debugging
+    console.log(`message send by: ${socket.id} on roomName: ${roomName} and message is "${message}".`) 
   });
 
   // disconnect event.
