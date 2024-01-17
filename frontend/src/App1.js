@@ -5,6 +5,7 @@ import Error from './Error';
 import './App1.css';
 import App from './App';
 import Termsandc from './Termsandc';
+import ChatRoom from './ChatRoom';
 
 const App1 = () => {
   return (
@@ -12,6 +13,7 @@ const App1 = () => {
     <Routes>
         {/* <Route path="/room" element={<App />} /> */}
         <Route path="/" element={<Home />} />
+        <Route path="/room/:roomName" element={<ChatRoom />} /> {/* Dynamic roomName parameter */}
         <Route path="/termsandc" element={<Termsandc />} />
         <Route path="*" element={<Error />} />
     </Routes>

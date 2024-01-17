@@ -1,7 +1,7 @@
 import React from 'react'
 import {useState, useEffect, useRef} from'react'
 import './App1.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 
 const Home = () => {
@@ -11,6 +11,7 @@ const Home = () => {
   const [lname, setLname] = useState('');
   const [email, setEmail] = useState('');
 
+  const navigate = useNavigate();
   const socket = useRef(null); // Create a ref for the socket
 
 
@@ -22,17 +23,31 @@ const Home = () => {
   const joinRoom = () => {
     if(socket.current && socket.current.connected){
       socket.current.emit('join-room', roomName, fname, lname, email);
+      navigate(`/room/${roomName}`);
+
     }
     else{
       console.log('socket is not connected');
     }
   };
 
+  const socketDisconnect = () => {
+    if(socket.current && socket.current.connected){
+      socket.current.disconnect();
+      console.log('socket Disconnected!');
+    }
+    else{
+      console.log("Socket is not connected!")
+    }
+  }
+
+
   useEffect(() => {
     socketConnection();
     // Clean up the socket connection when the component unmounts
     return () => {
-      socket.current.disconnect();
+      // socket.current.disconnect();
+      socketDisconnect();
     };
   }, []); // Empty dependency array ensures this useEffect runs once
 

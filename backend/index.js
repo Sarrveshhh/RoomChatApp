@@ -31,7 +31,7 @@ io.on('connection', socket => {
   //joining a room
   socket.on('join-room', (roomName, fname, lname, email) => {
     console.log('user'+ socket.id +'joining room:'+ roomName);
-    createUser(fname, lname, email, roomName);
+    createUser(socket, fname, lname, email, roomName, socket.id);
     socket.join(roomName);
   });
 
@@ -49,23 +49,55 @@ io.on('connection', socket => {
   socket.on('room-message', (message, roomName) => {
     io.to(roomName).emit('message', message);
   });
+
+  // disconnect event.
+  // socket.on('disconnect', async () => {
+  //   console.log('user disconnected with id:' + socket.id);
+  
+  //   try {
+  //     // Find and delete the user from the database based on their socket id
+  //     const deletedUser = await deleteUserBySocketId(socket.id);
+  //     console.log('User deleted!', deletedUser);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
+
 });
 
 
 
+//logic to delete the user when it leaves the room.
+
+// async function deleteUserBySocketId(socketId) {
+//   try {
+//     // Find and delete the user based on their socket id
+//     const deletedUser = await User.findOneAndDelete({ socketId });
+//     return deletedUser;
+//   } catch (error) {
+//     throw error;
+//   }
+// }
+
+
+
+
+
+
 //creating user function
-async function createUser(fname, lname, email, room) {
+async function createUser(socket, fname, lname, email, room) {
   try{
     const newUser = new User({
       fname,
       lname,
       email,
-      room
+      room,
+      socketId: socket.id,
     });
 
     const savedUser = await newUser.save();
     console.log('User created!', savedUser);
-    // return savedUser;
+    return savedUser;
 
   }
   catch(error){
